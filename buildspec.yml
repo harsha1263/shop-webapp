@@ -39,7 +39,6 @@ phases:
       - echo "Pushing image"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
       - echo "Succesfully pushed $ECR_REPO:$IMAGE_TAG to ECR"
-   "
 
 cache:
   paths:
