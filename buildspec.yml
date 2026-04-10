@@ -22,8 +22,13 @@ phases:
       - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
       - echo "Running Test for Builds"
       - mvn test
+      - echo "Logging into Docker Hub"
+      - DOCKERHUB_USERNAME=$(aws secretsmanager get-secret-value --secret-id dockerhub-credentials --query SecretString --output text | python3 -c "import sys,json; print(json.load(sys.stdin)['username'])")
+      - DOCKERHUB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id dockerhub-credentials --query SecretString --output text | python3 -c "import sys,json; print(json.load(sys.stdin)['password'])")
+      - echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - echo "Logging into ECR"
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+      
   build:
     commands:
        - echo "Build starting"
