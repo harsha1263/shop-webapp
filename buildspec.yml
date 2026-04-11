@@ -15,7 +15,11 @@ env:
 phases:
   install:
     runtime-versions:
-      java: corretto21   
+      java: corretto21 
+    commands:
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/ 
   
   pre_build:
     commands:
@@ -44,6 +48,13 @@ phases:
       - echo "Pushing image"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
       - echo "Succesfully pushed $ECR_REPO:$IMAGE_TAG to ECR"
+      - echo "Updating kubeconfig"
+      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+      - echo "Deploying to EKS"
+      - kubectl apply -f k8s/deployment.yml
+      - kubectl apply -f k8s/service.yml
+      - kubectl set image deployment/$ECR_REPO $ECR_REPO=$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - kubectl rollout status deployment/$ECR_REPO
 
 cache:
   paths:
