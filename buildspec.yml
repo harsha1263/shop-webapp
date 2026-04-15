@@ -4,8 +4,8 @@ env:
   variables:
     REGION: ap-south-1
     PORT: 8080
-    ECR_REPO: shop-webapp
-    AWS_ACCOUNT_ID: 517728568049
+    ECR_REPO: shop-webapp-ecr
+    AWS_ACCOUNT_ID: 720546261973
     IMAGE_TAG: latest
     CLUSTER_NAME: shop-webapp-cluster
   exported-variables:
