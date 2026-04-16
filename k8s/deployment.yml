@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: shop-webapp
-          image: 720546261973.dkr.ecr.ap-south-1.amazonaws.com/shop-webapp-ecr
+          image: 720546261973.dkr.ecr.ap-south-1.amazonaws.com/shop-webapp-ecr:latest
           ports:
             - containerPort: 8080
